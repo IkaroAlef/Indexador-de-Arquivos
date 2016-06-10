@@ -12,5 +12,11 @@ object OlaMundo {
       s.append("Olá!");
       s.append("Vamos aprender Scala?")
       println(s);
+      
+      println(soma(3,4))
   }
+  
+  def soma(x: Int, y: Int ): Int = {
+       x + y
+    }
 }
