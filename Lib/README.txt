@@ -1,0 +1,1 @@
+Libs adicionais para a abertura de PDFs e Imagens
