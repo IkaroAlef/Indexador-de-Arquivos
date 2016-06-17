@@ -1,22 +1,11 @@
+import com.sun.org.apache.xalan.internal.xsltc.compiler.ForEach
 
 
 object OlaMundo {
   def main(args: Array[String]){
-    println("Ola mundo!")
-    var num1 = 5
-      var num2 = 10
-      var texto = "A soma é: "
-      println(texto + (num1 + num2))
-      
-      var s = new StringBuffer
-      s.append("Olá!");
-      s.append("Vamos aprender Scala?")
-      println(s);
-      
-      println(soma(3,4))
+        val x = "ikaro alef ufrpe"
+        var list = x.split(" ").toList
+        println(list.contains("ikaro alef"))       
+
   }
-  
-  def soma(x: Int, y: Int ): Int = {
-       x + y
-    }
 }
