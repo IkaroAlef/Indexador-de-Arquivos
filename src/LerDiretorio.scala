@@ -65,13 +65,14 @@ object LerDiretorio {
     lista
   }
   
+  
   def main(args: Array[String]) {
     
     println("Informe o caminho do Diretório:")
     var path = scala.io.StdIn.readLine()
     walk(path).toList.foreach { e => println(e) }
     //println ( walk(path).toList )
-   
+    
   }
   
 }
