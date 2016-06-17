@@ -4,7 +4,18 @@ import java.io.IOException
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import scala.collection.mutable.ListBuffer
+import java.net.URLConnection
 
+import org.apache.commons.logging.impl.Log4JLogger
+import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.text.PDFTextStripper
+import org.apache.pdfbox.text.PDFTextStripperByArea
+
+import com.drew.imaging.ImageMetadataReader
+import com.drew.imaging.ImageProcessingException
+import com.drew.metadata.Directory
+import com.drew.metadata.Metadata
+import com.drew.metadata.Tag
 
 object LerDiretorio {
   
@@ -27,10 +38,38 @@ object LerDiretorio {
 		  }
       n += 1
     }
-    
-    // O retorno
-    lista
+    lista 
   }
+  
+  def lerPdf(path: String): ListBuffer[Any] = {
+    // Ref.: http://stackoverflow.com/questions/4784825/how-to-read-pdf-files-using-java
+    val lista = ListBuffer.empty[Any]
+  	try {
+	    var document = PDDocument.load( new File( path ) )
+	    document.getClass();
+	    
+	    if ( !document.isEncrypted() ) {
+	        var stripper = new PDFTextStripperByArea()
+	        stripper.setSortByPosition(true)
+	        var Tstripper = new PDFTextStripper()
+	        var st = Tstripper.getText(document)
+	        val pattern = Pattern.compile("\\w+")
+	        var n = 1
+	        // Função de alta ordem + Função Lambda (anônima)
+	        var stF = st.split("\n").foreach { 
+	          x => { val matcher = pattern.matcher(x)
+		               while (matcher.find()) {
+                    // Concatena a lista
+                     lista += ( ( path, matcher.group(), n ) )
+                   }
+                   n += 1 }
+            }
+	    }
+	  } catch {
+	    case e : Exception => println("exception caught: " + e)
+	  }
+	  lista
+  } // Fim do Ler PDF
   
   def getListOfFiles(dir: String): List[File] = {
     val d = new File(dir)
@@ -47,15 +86,27 @@ object LerDiretorio {
     // Loop through each line in the file
     for (f <- getListOfFiles( path )) {
       if ( f.isDirectory() ) {
+          lista += ( ( f.getCanonicalPath(), f.getName(), 0 ) )
           lista ++= walk( f.getAbsolutePath() )
-          //println( "Dir:" + f.getAbsoluteFile() )
+          
       }
       else {
-          //println( "File:" + f.getAbsoluteFile() )
+          // Adiciona o nome do arquivo na lista de tuplas
+          lista += ( ( f.getCanonicalPath(), f.getName(), 0 ) )
+          
           // Para ler cada arquivo
           try{
-          	var c = f.getCanonicalPath()
-          	lista ++= lerArquivo( c )
+            var fType = URLConnection.guessContentTypeFromName( f.getAbsolutePath() )
+            var c = f.getCanonicalPath()
+            // Para ler cada arquivo, se for PDF
+            if ( fType.equals("application/pdf") ) {
+            	lista ++= lerPdf( c )
+            }
+            
+            if ( fType.contains("text") ) {
+              lista ++= lerArquivo( c )  
+            }
+            
           } catch {
             case e : IOException => println("exception caught: " + e)
           }
