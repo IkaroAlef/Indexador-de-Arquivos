@@ -5,6 +5,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 import scala.collection.mutable.ListBuffer
 
+
 object LerDiretorio {
   
   def lerArquivo(path: String): ListBuffer[Any] = {
