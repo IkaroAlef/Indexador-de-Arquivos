@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="C:/Users/Saulo/workspace/Indexador-de-Arquivos/Lib/metadata-extractor-2.9.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Saulo/workspace/Indexador-de-Arquivos/Lib/pdfbox-app-2.0.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Saulo/workspace/Indexador-de-Arquivos/Lib/xmpcore-5.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Saulo/workspace/Indexador-de-Arquivos/Lib/sqlite-jdbc-3.8.11.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
