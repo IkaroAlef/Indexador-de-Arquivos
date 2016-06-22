@@ -33,43 +33,45 @@ object Searcher {
       val db = new DB()
       println("Criando a estrutura do BD")
       db.startTabela()
+      
       println("Informe o caminho do Diretório:")
       var path = scala.io.StdIn.readLine()
+      
+      println("Salvando a indexação no BD")
       LerDiretorio.walk(path).toList.foreach { e => 
         { val (p, n, l) = e
           db.inserirUm(p, n, l)
         }
       }
-      println("Fim do if !f.exists")
+      
     }
     
     val db = new DB()
     val listaBufDb = db.listarTodos()
-    val listaDb = listaBufDb.toList
+    val listaDb = listaBufDb.toList  // Lista fixa, temp. APAGAR SE NÃO FOR USAR
     
     //listaDb.foreach { e => println(e) }
-
     //LerDiretorio.walk(path).toList.foreach { e => println(e) }
     
-//    while (op!=0){ 
-//      println("\nQue busca deseja realizar? \n 1- Palavra Exata \n 2- Palavra contém a pesquisa \n 3- Pesquisa uma ou mais palavras \n 0- Sair")
-//      op = scala.io.StdIn.readInt() 
-//      op match{ ////menu para o tipo de pesquisa
-//        case 1 => 
-//            print("Digite a palavra exata: ")
-//            busca = scala.io.StdIn.readLine()
-//            search(LerDiretorio.walk(path),busca).toList.foreach { e => println(e) }
-//        case 2 =>
-//            print("Digite a palavra ou parte dela: ")
-//            busca = scala.io.StdIn.readLine()
-//            searchCont(LerDiretorio.walk(path),busca).toList.foreach { e => println(e) }
-//        case 3 =>
-//            print("Digite as palavras: ")
-//            busca = scala.io.StdIn.readLine()
-//            searchOr(LerDiretorio.walk(path),busca).toList.foreach { e => println(e) }
-//        case 0 => 
-//      }
-//    }
+    while (op!=0){ 
+      println("\nQue busca deseja realizar? \n 1- Palavra Exata \n 2- Palavra contém a pesquisa \n 3- Pesquisa uma ou mais palavras \n 0- Sair")
+      op = scala.io.StdIn.readInt() 
+      op match{ ////menu para o tipo de pesquisa
+        case 1 => 
+            print("Digite a palavra exata: ")
+            busca = scala.io.StdIn.readLine()
+            search(listaBufDb,busca).toList.foreach { e => println(e) }
+        case 2 =>
+            print("Digite a palavra ou parte dela: ")
+            busca = scala.io.StdIn.readLine()
+            searchCont(listaBufDb,busca).toList.foreach { e => println(e) }
+        case 3 =>
+            print("Digite as palavras: ")
+            busca = scala.io.StdIn.readLine()
+            searchOr(listaBufDb,busca).toList.foreach { e => println(e) }
+        case 0 => 
+      }
+    }
     
   }
 }
