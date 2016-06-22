@@ -36,7 +36,7 @@ class DB(){
 			var sql = "DELETE FROM tuplas;"
 			stmt.executeUpdate(sql)
 			stmt.close()
-			//println("Delete done successfully")
+			//println("Clear done successfully")
 		} catch {
 		  case e : Exception => println("exception caught: " + e)
 		}
