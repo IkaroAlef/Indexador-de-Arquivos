@@ -77,6 +77,7 @@ class DB(){
 			sql = sql.dropRight(1)
 			sql += ";"
 			//println("Comando SQL:\n"+sql)
+			//
 			stmt.executeUpdate(sql)
 			
 			var comm = "COMMIT;"
