@@ -19,59 +19,62 @@ import com.drew.metadata.Tag
 import java.util.Calendar
 
 object LerDiretorio {
-  
+
   def lerArquivo(path: String): ListBuffer[Any] = {
     var n = 1
     val lista = ListBuffer.empty[Any]
     val pattern = Pattern.compile("\\w+")
-    
-    for ( line <- Source.fromFile( path ).getLines() ) {
+
+    for (line <- Source.fromFile(path).getLines()) {
       //println("--- Conteúdo ---")
-      
-		  val matcher = pattern.matcher(line)
+
+      val matcher = pattern.matcher(line)
       // Do something with line
       //println(line + "|Linha:"+n )
       while (matcher.find()) {
         // Concatena a lista
-         lista += ( ( path, matcher.group(), n ) )
-		    //println( path + "|" + matcher.group() + "|L:" + n)
-        
-		  }
+        lista += ((path, matcher.group(), n))
+        //println( path + "|" + matcher.group() + "|L:" + n)
+
+      }
       n += 1
     }
-    lista 
+    lista
   }
-  
+
   def lerPdf(path: String): ListBuffer[Any] = {
     // Ref.: http://stackoverflow.com/questions/4784825/how-to-read-pdf-files-using-java
     val lista = ListBuffer.empty[Any]
-  	try {
-	    var document = PDDocument.load( new File( path ) )
-	    document.getClass();
-	    
-	    if ( !document.isEncrypted() ) {
-	        var stripper = new PDFTextStripperByArea()
-	        stripper.setSortByPosition(true)
-	        var Tstripper = new PDFTextStripper()
-	        var st = Tstripper.getText(document)
-	        val pattern = Pattern.compile("\\w+")
-	        var n = 1
-	        // Função de alta ordem + Função Lambda (anônima)
-	        var stF = st.split("\n").foreach { 
-	          x => { val matcher = pattern.matcher(x)
-		               while (matcher.find()) {
-                    // Concatena a lista
-                     lista += ( ( path, matcher.group(), n ) )
-                   }
-                   n += 1 }
+    try {
+      var document = PDDocument.load(new File(path))
+      document.getClass();
+
+      if (!document.isEncrypted()) {
+        var stripper = new PDFTextStripperByArea()
+        stripper.setSortByPosition(true)
+        var Tstripper = new PDFTextStripper()
+        var st = Tstripper.getText(document)
+        val pattern = Pattern.compile("\\w+")
+        var n = 1
+        // Função de alta ordem + Função Lambda (anônima)
+        var stF = st.split("\n").foreach {
+          x =>
+            {
+              val matcher = pattern.matcher(x)
+              while (matcher.find()) {
+                // Concatena a lista
+                lista += ((path, matcher.group(), n))
+              }
+              n += 1
             }
-	    }
-	  } catch {
-	    case e : Exception => println("exception caught: " + e)
-	  }
-	  lista
+        }
+      }
+    } catch {
+      case e: Exception => println("exception caught: " + e)
+    }
+    lista
   } // Fim do Ler PDF
-  
+
   def getListOfFiles(dir: String): List[File] = {
     val d = new File(dir)
     if (d.exists && d.isDirectory) {
@@ -81,46 +84,44 @@ object LerDiretorio {
       List[File]()
     }
   }
-  
+
   def walk(path: String): ListBuffer[Any] = {
     val lista = ListBuffer.empty[Any]
     // Loop through each line in the file
-    for (f <- getListOfFiles( path )) {
-      if ( f.isDirectory() ) {
-          lista += ( ( f.getCanonicalPath(), f.getName(), 0 ) )
-          lista ++= walk( f.getAbsolutePath() )
-          
-      }
-      else {
-          // Adiciona o nome do arquivo na lista de tuplas
-          lista += ( ( f.getCanonicalPath(), f.getName(), 0 ) )
-          
-          // Para ler cada arquivo
-          try{
-            var fType = URLConnection.guessContentTypeFromName( f.getAbsolutePath() )
-            var c = f.getCanonicalPath()
-            // Para ler cada arquivo, se for PDF
-            if ( fType.equals("application/pdf") ) {
-            	lista ++= lerPdf( c )
-            }
-            
-            if ( fType.contains("text") ) {
-              lista ++= lerArquivo( c )  
-            }
-            
-          } catch {
-            case e : IOException => println("exception caught: " + e)
+    for (f <- getListOfFiles(path)) {
+      if (f.isDirectory()) {
+        lista += ((f.getCanonicalPath(), f.getName(), 0))
+        lista ++= walk(f.getAbsolutePath())
+
+      } else {
+        // Adiciona o nome do arquivo na lista de tuplas
+        lista += ((f.getCanonicalPath(), f.getName(), 0))
+
+        // Para ler cada arquivo
+        try {
+          var fType = URLConnection.guessContentTypeFromName(f.getAbsolutePath())
+          var c = f.getCanonicalPath()
+          // Para ler cada arquivo, se for PDF
+          if (fType.equals("application/pdf")) {
+            lista ++= lerPdf(c)
           }
-          
+
+          if (fType.contains("text")) {
+            lista ++= lerArquivo(c)
+          }
+
+        } catch {
+          case e: IOException => println("exception caught: " + e)
+        }
+
       }
     }
-    
+
     lista
   }
-  
-  
+
   def main(args: Array[String]) {
-    
+
     println("Informe o caminho do Diretório:")
     var path = scala.io.StdIn.readLine()
     
@@ -129,7 +130,7 @@ object LerDiretorio {
     println("Preparando Banco de Dados")
     val db = new DB()
     db.startTabela()
-    
+
     //walk(path).toList.foreach { e => println(e) }
     //println ( walk(path).toList )
     // Após montar a lista a mesma é guardada no banco de dados
@@ -142,6 +143,7 @@ object LerDiretorio {
     }
     */
     println("Salvando o Banco de Dados")
+
 //    walk(path).toList.foreach { e => 
 //      { val (p, n, l) = e
 //        db.inserirUm(p, n, l)
@@ -154,5 +156,5 @@ object LerDiretorio {
     println( (end - start) + " total milliseconds")
     
   }
-  
+
 }
