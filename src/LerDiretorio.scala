@@ -16,6 +16,7 @@ import com.drew.imaging.ImageProcessingException
 import com.drew.metadata.Directory
 import com.drew.metadata.Metadata
 import com.drew.metadata.Tag
+import java.util.Calendar
 
 object LerDiretorio {
   
@@ -122,6 +123,9 @@ object LerDiretorio {
     
     println("Informe o caminho do Diretório:")
     var path = scala.io.StdIn.readLine()
+    
+    val start: Long = System.currentTimeMillis
+
     println("Preparando Banco de Dados")
     val db = new DB()
     db.startTabela()
@@ -138,11 +142,16 @@ object LerDiretorio {
     }
     */
     println("Salvando o Banco de Dados")
-    walk(path).toList.foreach { e => 
-      { val (p, n, l) = e
-        db.inserirUm(p, n, l)
-      }
-    }
+//    walk(path).toList.foreach { e => 
+//      { val (p, n, l) = e
+//        db.inserirUm(p, n, l)
+//      }
+//    }
+    
+    db.inserirListBuffer( walk(path) )
+    
+    val end: Long = System.currentTimeMillis
+    println( (end - start) + " total milliseconds")
     
   }
   

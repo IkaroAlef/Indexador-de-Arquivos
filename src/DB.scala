@@ -60,6 +60,34 @@ class DB(){
 		  case e : Exception => println("exception caught: " + e)
 		}
   }
+  
+  def inserirListBuffer(listaBuf: ListBuffer[Any]): Unit = {
+    // Inserir um registro na tabela
+		try {
+			var stmt = c.createStatement()
+			var beg = "BEGIN;"
+			stmt.executeUpdate(beg)
+			
+			var sql = "INSERT INTO tuplas (path,name,line) VALUES"
+			listaBuf.toList.foreach { e => 
+                { val (p, n, l) = e
+                  sql += "('"+p+"','"+n+"','"+l+"'),"
+                }
+			}
+			sql = sql.dropRight(1)
+			sql += ";"
+			//println("Comando SQL:\n"+sql)
+			stmt.executeUpdate(sql)
+			
+			var comm = "COMMIT;"
+			stmt.executeUpdate(comm)
+			
+			stmt.close()
+			//println("Insert done successfully")
+		} catch {
+		  case e : Exception => println("exception caught: " + e)
+		}
+  }
  
   def listarTodos(): ListBuffer[Any] = {
     val lista = ListBuffer.empty[Any]
