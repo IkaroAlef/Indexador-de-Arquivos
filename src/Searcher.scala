@@ -2,6 +2,7 @@ import scala.util.control.Breaks._
 import scala.util.control._
 import scala.collection.mutable.ListBuffer
 import java.io.File
+import java.io.IOException
 
 object Searcher {
 
@@ -13,13 +14,18 @@ object Searcher {
   }
 
   def main(args: Array[String]) {
-    var op = 1
+    var op = -1
     var f = new File("index.db")
     val loop = new Breaks
     breakable {
       while (op != 0) {
-        println("O que deseja fazer? \n 1 - Indexar um diretório \n 2 - Realizar uma busca \n 0 - Sair")
+        println("\nO que deseja fazer? \n 1 - Indexar um diretório \n 2 - Realizar uma busca \n 0 - Sair")
+        op = -1
+        try{
         op = scala.io.StdIn.readInt()
+        }catch {
+          case e: NumberFormatException => println("Digite apenas numeros.") 
+        }
         op match {
           case 1 =>
             if (!(f.exists())) {
@@ -33,12 +39,7 @@ object Searcher {
             var path = scala.io.StdIn.readLine()
 
             println("Salvando a indexação no BD, aguarde um momento...")
-            LerDiretorio.walk(path).toList.foreach { e =>
-              {
-                val (p, n, l) = e
-                db.inserirUm(p, n, l)
-              }
-            }
+            db.inserirListBuffer(LerDiretorio.walk(path))
             println("Salvo com sucesso!")
 
           case 2 =>
