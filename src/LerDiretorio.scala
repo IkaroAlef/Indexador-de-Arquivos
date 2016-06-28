@@ -120,6 +120,10 @@ object LerDiretorio {
     lista
   }
 
+  /*
+   * Main para teste individual do indexador.
+   */
+  /*
   def main(args: Array[String]) {
 
     println("Informe o caminho do Diretório:")
@@ -131,30 +135,13 @@ object LerDiretorio {
     val db = new DB()
     db.startTabela()
 
-    //walk(path).toList.foreach { e => println(e) }
-    //println ( walk(path).toList )
-    // Após montar a lista a mesma é guardada no banco de dados
-    /*
-     * Ref.: http://www.artima.com/forums/flat.jsp?forum=283&thread=243570
-    walk(path).toList.foreach { e => 
-      { val (p, n, l) = e
-        println("Path: "+p+"| Name: "+n+"| Line:"+l)
-      } 
-    }
-    */
     println("Salvando o Banco de Dados")
-
-//    walk(path).toList.foreach { e => 
-//      { val (p, n, l) = e
-//        db.inserirUm(p, n, l)
-//      }
-//    }
     
     db.inserirListBuffer( walk(path) )
     
     val end: Long = System.currentTimeMillis
     println( (end - start) + " total milliseconds")
-    
   }
+  */
 
 }
