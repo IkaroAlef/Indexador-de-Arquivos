@@ -124,7 +124,7 @@ object LerDiretorio {
   /*
    * Main para teste individual do indexador.
    */
-  
+  /*
   def main(args: Array[String]) {
 
     println("Informe o caminho do Diretório:")
@@ -143,5 +143,7 @@ object LerDiretorio {
     val end: Long = System.currentTimeMillis
     println( (end - start) + " total milliseconds")
   }
+  *
+  */
 
 }
