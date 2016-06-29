@@ -4,7 +4,10 @@ PARADIGMAS DE PROGRAMAÇÃO - PROF. LUCAS ALBERTINS
 GRUPO: IKARO ALEF, KENEDY FELIPE, SAULO GOMES
 
 FUNCIONAL: INDEXADOR DE ARQUIVOS
+
 -----
 Main: Searcher.scala
 
 Todos os arquivos JARs na pasta Lib devem estar no Classpath do projeto no momento de compilação.
+
+Obs.: o arquivo .classpath atual já possuem as Libs importadas, em qualquer caso é bom certificar de que as Libs estão importadas corretamente.
